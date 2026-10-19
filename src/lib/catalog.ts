@@ -1,0 +1,207 @@
+import {
+  Receipt, FileSpreadsheet, Landmark, Percent, Building2, Handshake, BadgeCheck, Scale,
+  FileSignature, Calculator, Factory, ShieldCheck, Rocket, FileText, Home, Users, CalendarClock,
+  BookOpen, FileSearch, type LucideIcon,
+} from "lucide-react";
+
+export type CategoryKey = "tax" | "legal" | "setup" | "accounting" | "startup" | "documentation";
+
+export const CATEGORIES: { key: CategoryKey; name: string; blurb: string; icon: LucideIcon }[] = [
+  { key: "tax", name: "Tax & GST", blurb: "GST, income tax and TDS support", icon: Receipt },
+  { key: "legal", name: "Legal Services", blurb: "Consultations, contracts and trademarks", icon: Scale },
+  { key: "setup", name: "Business Setup", blurb: "Company, LLP and MSME registration", icon: Building2 },
+  { key: "accounting", name: "Accounting & Finance", blurb: "Books, payroll and reporting", icon: Calculator },
+  { key: "startup", name: "Startup Support", blurb: "Compliance for growing companies", icon: Rocket },
+  { key: "documentation", name: "Documentation", blurb: "Agreements and business documents", icon: FileText },
+];
+
+export type Question = { id: string; label: string; type: "text" | "select" | "textarea"; options?: string[] };
+
+export type Service = {
+  slug: string;
+  name: string;
+  category: CategoryKey;
+  icon: LucideIcon;
+  short: string;
+  overview: string;
+  whoNeeds: string[];
+  documents: string[];
+  workflow: string[];
+  professional: string;
+  modes: ("Online" | "In-person")[];
+  popular?: boolean;
+  questions: Question[];
+  faqs: { q: string; a: string }[];
+};
+
+export const genericFaqs = (name: string) => [
+  { q: `How is pricing for ${name} decided?`, a: "Professional fees are quoted by the professional handling your request after reviewing your requirements. LegalSetu platform fees, if any, are shown separately." },
+  { q: "Can I cancel my request?", a: "Yes. You can cancel a request from your dashboard before work begins. See our Cancellation and Refund Policy for details." },
+  { q: "Is my information secure?", a: "Documents are stored in private storage and are only visible to you, the professional assigned to your request and authorised support staff." },
+];
+
+const base = (s: Omit<Service, "faqs" | "modes"> & { modes?: Service["modes"] }): Service => ({
+  modes: ["Online"],
+  ...s,
+  faqs: genericFaqs(s.name),
+});
+
+const entityQ: Question = { id: "entity", label: "Type of business", type: "select", options: ["Individual / Proprietor", "Partnership", "LLP", "Private Limited", "Other"] };
+
+export const SERVICES: Service[] = [
+  base({ slug: "gst-registration", name: "GST Registration", category: "tax", icon: Receipt, popular: true,
+    short: "Get support applying for a GSTIN for your business.",
+    overview: "Assistance in preparing and submitting your GST registration application through an authorised professional, including document review and query responses.",
+    whoNeeds: ["Businesses crossing applicable turnover thresholds", "Inter-state suppliers", "E-commerce sellers", "Businesses wanting input tax credit"],
+    documents: ["PAN of business/proprietor", "Aadhaar of proprietor/partners/directors (as required by the portal)", "Proof of business address", "Bank account details", "Photographs"],
+    workflow: ["Share business details", "Professional reviews eligibility & documents", "Application prepared for your review and consent", "Submission by authorised professional", "Respond to any department queries"],
+    professional: "A Chartered Accountant, GST practitioner or other authorised professional prepares and submits the application with your consent.",
+    questions: [entityQ, { id: "turnover", label: "Expected annual turnover", type: "select", options: ["Below ₹20 lakh", "₹20 lakh – ₹40 lakh", "Above ₹40 lakh", "Not sure"] }, { id: "nature", label: "Nature of business", type: "text" }] }),
+  base({ slug: "gst-return-filing", name: "GST Return Filing", category: "tax", icon: FileSpreadsheet, popular: true,
+    short: "Monthly or quarterly GST return preparation and filing support.",
+    overview: "Help preparing GSTR-1, GSTR-3B and other applicable returns, reconciling input tax credit and tracking due dates.",
+    whoNeeds: ["GST-registered businesses", "Composition scheme taxpayers", "Businesses with pending returns"],
+    documents: ["GSTIN and portal access arrangement", "Sales and purchase invoices", "Previous returns, if any"],
+    workflow: ["Share invoices and records", "Reconciliation by professional", "Draft return for your approval", "Filing with your consent", "Acknowledgement shared"],
+    professional: "Filing is done by an authorised professional only after your review and approval.",
+    questions: [{ id: "frequency", label: "Filing frequency", type: "select", options: ["Monthly", "Quarterly (QRMP)", "Composition", "Not sure"] }, { id: "pending", label: "Any pending returns?", type: "select", options: ["No", "Yes"] }] }),
+  base({ slug: "itr-filing", name: "Income Tax Return (ITR)", category: "tax", icon: Landmark, popular: true,
+    short: "ITR preparation for salaried individuals, freelancers and businesses.",
+    overview: "Professional assistance with choosing the right ITR form, computing income and deductions, and filing your return.",
+    whoNeeds: ["Salaried individuals", "Freelancers and consultants", "Business owners", "Individuals with capital gains"],
+    documents: ["PAN", "Form 16 / income proofs", "Form 26AS / AIS", "Investment and deduction proofs", "Bank statements"],
+    workflow: ["Share income details", "Computation by professional", "Review draft computation", "Filing with your consent", "E-verification guidance"],
+    professional: "Prepared by a qualified tax professional. LegalSetu does not file returns on its own.",
+    questions: [{ id: "income", label: "Main source of income", type: "select", options: ["Salary", "Business / Profession", "Capital gains", "Multiple sources"] }, { id: "fy", label: "Financial year", type: "text" }] }),
+  base({ slug: "tds-return", name: "TDS Services", category: "tax", icon: Percent, popular: true,
+    short: "TDS computation, deposit tracking and quarterly return support.",
+    overview: "Support preparing quarterly TDS returns, tracking challans and issuing TDS certificates.",
+    whoNeeds: ["Employers", "Businesses making specified payments", "Deductors with TAN"],
+    documents: ["TAN", "Challan details", "Deductee PAN and payment details"],
+    workflow: ["Share deduction data", "Validation by professional", "Return prepared for approval", "Filing with consent", "Certificates generated"],
+    professional: "Handled by a qualified tax professional.",
+    questions: [{ id: "quarter", label: "Quarter", type: "select", options: ["Q1", "Q2", "Q3", "Q4"] }, { id: "deductees", label: "Approximate number of deductees", type: "text" }] }),
+  base({ slug: "company-registration", name: "Company Registration", category: "setup", icon: Building2, popular: true,
+    short: "Private limited company incorporation support.",
+    overview: "Guidance on name approval, incorporation documents, DSC/DIN and post-incorporation basics through a qualified professional.",
+    whoNeeds: ["Founders planning to raise funding", "Growing businesses wanting limited liability"],
+    documents: ["PAN and ID of directors", "Address proofs", "Registered office proof", "Proposed names"],
+    workflow: ["Share founder details", "Name check and document preparation", "Review & digital signatures", "Filing by authorised professional", "Certificate and post-incorporation checklist"],
+    professional: "Company secretaries, Chartered Accountants or advocates handle filings.",
+    questions: [{ id: "directors", label: "Number of directors", type: "text" }, { id: "names", label: "Proposed company names", type: "textarea" }] }),
+  base({ slug: "llp-registration", name: "LLP Registration", category: "setup", icon: Handshake, popular: true,
+    short: "Limited Liability Partnership incorporation support.",
+    overview: "Assistance with LLP name reservation, incorporation filings and the LLP agreement.",
+    whoNeeds: ["Professional firms", "Small businesses with multiple partners"],
+    documents: ["PAN and ID of partners", "Address proofs", "Registered office proof"],
+    workflow: ["Share partner details", "Name reservation", "Incorporation filing", "LLP agreement drafting", "Agreement filing"],
+    professional: "Handled by a qualified professional.",
+    questions: [{ id: "partners", label: "Number of partners", type: "text" }] }),
+  base({ slug: "trademark-assistance", name: "Trademark Assistance", category: "legal", icon: BadgeCheck, popular: true,
+    short: "Trademark search guidance and application support.",
+    overview: "Help assessing your mark, choosing classes and preparing a trademark application through a qualified professional.",
+    whoNeeds: ["Brands and startups", "Businesses launching products"],
+    documents: ["Logo / wordmark", "Applicant details", "User affidavit (if claiming prior use)"],
+    workflow: ["Share mark and business details", "Search & class guidance", "Application prepared", "Filing with consent", "Status tracking"],
+    professional: "Handled by an advocate or registered trademark agent.",
+    questions: [{ id: "mark", label: "Brand name or mark", type: "text" }, { id: "goods", label: "Goods/services covered", type: "textarea" }] }),
+  base({ slug: "legal-consultation", name: "Legal Consultation", category: "legal", icon: Scale, popular: true, modes: ["Online", "In-person"],
+    short: "Book a consultation with an advocate on a business or personal matter.",
+    overview: "Request an online or in-person consultation with an advocate. Advocates decide independently whether to accept a matter.",
+    whoNeeds: ["Business owners facing disputes", "Individuals needing legal clarity", "Startups reviewing obligations"],
+    documents: ["Relevant documents or correspondence (optional)"],
+    workflow: ["Describe your matter briefly", "Request is reviewed", "Advocate may accept and propose a time", "Consultation", "Follow-up if engaged"],
+    professional: "Consultations are provided by independent advocates. LegalSetu does not give legal advice.",
+    questions: [{ id: "area", label: "Area of law", type: "select", options: ["Business / commercial", "Property", "Employment", "Consumer", "Family", "Other"] }, { id: "summary", label: "Brief summary (avoid sensitive details)", type: "textarea" }] }),
+  base({ slug: "contract-review", name: "Contract Review", category: "legal", icon: FileSearch,
+    short: "Have a professional review a contract before you sign.",
+    overview: "An advocate reviews your contract and highlights risks and suggested changes.",
+    whoNeeds: ["Businesses signing vendor or client contracts", "Freelancers"],
+    documents: ["The contract draft"],
+    workflow: ["Upload contract", "Scope & quote", "Review", "Comments shared", "Optional call"],
+    professional: "Reviewed by an independent advocate.",
+    questions: [{ id: "type", label: "Contract type", type: "text" }, { id: "pages", label: "Approximate pages", type: "text" }] }),
+  base({ slug: "agreement-drafting", name: "Contract Drafting", category: "legal", icon: FileSignature, popular: true,
+    short: "Agreements drafted to your business requirements.",
+    overview: "Drafting of service agreements, NDAs, partnership deeds, employment agreements and more.",
+    whoNeeds: ["Businesses formalising relationships", "Startups hiring or partnering"],
+    documents: ["Key commercial terms", "Party details"],
+    workflow: ["Share requirements", "Quote", "First draft", "Revisions", "Final document"],
+    professional: "Drafted by an independent advocate.",
+    questions: [{ id: "type", label: "Agreement type", type: "select", options: ["NDA", "Service agreement", "Partnership deed", "Employment agreement", "Other"] }] }),
+  base({ slug: "rent-agreement", name: "Rent Agreement", category: "documentation", icon: Home,
+    short: "Residential or commercial rent agreement drafting.",
+    overview: "Drafting of rent or leave-and-licence agreements. Stamp duty and registration requirements vary by state.",
+    whoNeeds: ["Landlords", "Tenants", "Businesses leasing premises"],
+    documents: ["Owner and tenant details", "Property address", "Rent and deposit terms"],
+    workflow: ["Share terms", "Draft prepared", "Review", "Execution guidance per state rules"],
+    professional: "Drafted by an independent professional.",
+    questions: [{ id: "kind", label: "Property type", type: "select", options: ["Residential", "Commercial"] }, { id: "duration", label: "Duration (months)", type: "text" }] }),
+  base({ slug: "accounting", name: "Accounting & Bookkeeping", category: "accounting", icon: Calculator, popular: true,
+    short: "Monthly bookkeeping and financial statements.",
+    overview: "Regular bookkeeping, ledger maintenance and periodic financial statements.",
+    whoNeeds: ["Small businesses", "Shops", "Startups"],
+    documents: ["Bank statements", "Sales & purchase invoices", "Expense records"],
+    workflow: ["Scope discussion", "Data sharing setup", "Monthly bookkeeping", "Periodic reports"],
+    professional: "Handled by accountants or Chartered Accountants.",
+    questions: [{ id: "volume", label: "Monthly transaction volume", type: "select", options: ["Under 100", "100–500", "500+"] }] }),
+  base({ slug: "bookkeeping", name: "Bookkeeping", category: "accounting", icon: BookOpen,
+    short: "Clean, up-to-date books for your business.",
+    overview: "Recording of day-to-day transactions and reconciliations.",
+    whoNeeds: ["Small businesses", "Freelancers"],
+    documents: ["Bank statements", "Invoices"],
+    workflow: ["Scope", "Setup", "Recurring bookkeeping", "Reports"],
+    professional: "Handled by qualified accountants.",
+    questions: [{ id: "software", label: "Accounting software used", type: "text" }] }),
+  base({ slug: "payroll-support", name: "Payroll Support", category: "accounting", icon: Users,
+    short: "Payroll processing and related compliance support.",
+    overview: "Salary computation, payslips and support with applicable statutory contributions.",
+    whoNeeds: ["Businesses with employees"],
+    documents: ["Employee master data", "Salary structure"],
+    workflow: ["Setup", "Monthly processing", "Compliance tracking"],
+    professional: "Handled by qualified professionals.",
+    questions: [{ id: "employees", label: "Number of employees", type: "text" }] }),
+  base({ slug: "msme-udyam", name: "MSME / Udyam Assistance", category: "setup", icon: Factory, popular: true,
+    short: "Help with Udyam registration for MSMEs.",
+    overview: "Guidance and support for completing Udyam registration correctly.",
+    whoNeeds: ["Micro, small and medium enterprises"],
+    documents: ["Aadhaar of proprietor/authorised signatory (as required by the portal)", "PAN", "Business details"],
+    workflow: ["Share details", "Eligibility check", "Registration support", "Certificate"],
+    professional: "Supported by a qualified professional.",
+    questions: [entityQ] }),
+  base({ slug: "business-compliance", name: "Business Compliance", category: "startup", icon: ShieldCheck, popular: true,
+    short: "Ongoing compliance support for your business.",
+    overview: "Track and manage recurring statutory compliances with professional help.",
+    whoNeeds: ["Companies and LLPs", "Growing businesses"],
+    documents: ["Incorporation documents", "Previous filings"],
+    workflow: ["Compliance review", "Calendar setup", "Ongoing support"],
+    professional: "Handled by company secretaries or CAs.",
+    questions: [entityQ] }),
+  base({ slug: "startup-compliance", name: "Startup Compliance", category: "startup", icon: Rocket,
+    short: "First-year compliance for newly incorporated startups.",
+    overview: "Help with post-incorporation steps, statutory registers and annual filings.",
+    whoNeeds: ["Newly incorporated companies"],
+    documents: ["Certificate of incorporation", "MOA/AOA"],
+    workflow: ["Review", "Checklist", "Execution support"],
+    professional: "Handled by company secretaries or CAs.",
+    questions: [{ id: "incorporated", label: "Date of incorporation", type: "text" }] }),
+  base({ slug: "business-documentation", name: "Business Documentation", category: "documentation", icon: FileText,
+    short: "Board resolutions, declarations and business documents.",
+    overview: "Preparation of common business documents and formats.",
+    whoNeeds: ["Companies", "Partnerships", "Proprietors"],
+    documents: ["Details of the required document"],
+    workflow: ["Share requirement", "Draft", "Review", "Final"],
+    professional: "Prepared by a qualified professional.",
+    questions: [{ id: "doc", label: "Document needed", type: "text" }] }),
+  base({ slug: "compliance-calendar", name: "Business Compliance Calendar", category: "startup", icon: CalendarClock,
+    short: "A personalised calendar of your recurring due dates.",
+    overview: "A professional prepares a compliance calendar based on your registrations and activities.",
+    whoNeeds: ["Any registered business"],
+    documents: ["List of registrations (GST, TAN, etc.)"],
+    workflow: ["Share registrations", "Calendar prepared", "Reminders set up"],
+    professional: "Prepared by a qualified professional.",
+    questions: [{ id: "regs", label: "Registrations you hold", type: "textarea" }] }),
+];
+
+export const getService = (slug: string) => SERVICES.find((s) => s.slug === slug);
+export const categoryName = (k: string) => CATEGORIES.find((c) => c.key === k)?.name ?? k;

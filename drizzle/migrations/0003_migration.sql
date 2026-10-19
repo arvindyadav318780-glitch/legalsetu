@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.guard_document_request(), public.notify_appointment(), public.audit_payment(), public.audit_refund() FROM PUBLIC, anon;

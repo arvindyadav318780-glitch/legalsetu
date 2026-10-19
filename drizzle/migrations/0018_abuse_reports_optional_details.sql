@@ -1,0 +1,2 @@
+ALTER TABLE public.abuse_reports DROP CONSTRAINT abuse_reports_reason_check;
+ALTER TABLE public.abuse_reports ADD CONSTRAINT abuse_reports_reason_check CHECK (length(reason) <= 2000 AND (reason_code <> 'other' OR length(reason) >= 10));

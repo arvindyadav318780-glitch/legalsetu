@@ -1,0 +1,11 @@
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+revoke execute on function public.log_request_status() from public, anon, authenticated;
+revoke execute on function public.guard_request_update() from public, anon, authenticated;
+revoke execute on function public.guard_verification() from public, anon, authenticated;
+revoke execute on function public.has_role(uuid, app_role) from public, anon;
+revoke execute on function public.is_staff(uuid) from public, anon;
+revoke execute on function public.is_professional(uuid) from public, anon;
+revoke execute on function public.can_access_request(uuid) from public, anon;
+drop policy "blog public" on public.blog_posts;
+create policy "blog public anon" on public.blog_posts for select to anon using (published);
+create policy "blog public auth" on public.blog_posts for select to authenticated using (published or public.is_staff(auth.uid()));

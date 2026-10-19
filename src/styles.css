@@ -1,0 +1,258 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-accent-light: var(--accent-light);
+  --color-walnut: var(--walnut);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-navy-foreground: var(--navy-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-teal-soft: var(--teal-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --shadow-card: 0 1px 2px oklch(0.27 0.06 250 / 0.04), 0 4px 16px -4px oklch(0.27 0.06 250 / 0.08);
+  --shadow-lift: 0 2px 4px oklch(0.27 0.06 250 / 0.05), 0 16px 32px -12px oklch(0.27 0.06 250 / 0.18);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* LegalSetu "Modern Indian Professional" palette */
+  --background: #F5F1E8; /* warm ivory */
+  --foreground: #1B2638; /* ink navy-charcoal */
+  --card: #FFFFFF;
+  --card-foreground: #1B2638;
+  --popover: #FFFFFF;
+  --popover-foreground: #1B2638;
+  --navy: #14243A; /* midnight navy */
+  --navy-2: #1B2F4A;
+  --navy-foreground: #F5F1E8;
+  --primary: #14243A;
+  --primary-foreground: #FFFFFF;
+  --accent: #86683D; /* antique bronze */
+  --accent-foreground: #FFFFFF;
+  --accent-light: #A78655; /* bronze on dark */
+  --teal-soft: #F1EADC;
+  --walnut: #5A4430;
+  --secondary: #EDE6D7; /* parchment */
+  --secondary-foreground: #1B2638;
+  --muted: #EFEAE0;
+  --muted-foreground: #5B6474; /* warm charcoal grey */
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(1 0 0);
+  --warning: oklch(0.62 0.14 58);
+  --warning-soft: oklch(0.95 0.04 75);
+  --success: oklch(0.5 0.11 150);
+  --success-soft: oklch(0.94 0.035 150);
+  --border: #E5E7EB;
+  --input: #D9DCE1;
+  --ring: #A78655;
+  --chart-1: #A78655;
+  --chart-2: #14243A;
+  --chart-3: oklch(0.62 0.14 58);
+  --chart-4: oklch(0.5 0.11 150);
+  --chart-5: oklch(0.48 0.025 60);
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1B2638;
+  --sidebar-primary: #14243A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F1EADC;
+  --sidebar-accent-foreground: #14243A;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #A78655;
+  --texture-opacity: 0.07;
+}
+
+/* A non-interactive engraving layer keeps every existing surface intact. */
+.ashoka-background-texture {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  user-select: none;
+  opacity: var(--texture-opacity);
+  background-repeat: no-repeat;
+  background-size: min(86vh, 860px) min(86vh, 860px);
+  background-position: center center;
+  /* Medallion glow and hairline rings sit behind the engraving so the motif
+     reads as an embossed coin rather than a flat watermark. */
+  background-image:
+    radial-gradient(circle at center, rgba(167, 134, 85, 0.42) 0%, rgba(167, 134, 85, 0.16) 34%, rgba(167, 134, 85, 0) 66%),
+    radial-gradient(circle at center, rgba(167, 134, 85, 0) 45.4%, rgba(167, 134, 85, 0.62) 46%, rgba(167, 134, 85, 0) 46.6%),
+    radial-gradient(circle at center, rgba(167, 134, 85, 0) 53.4%, rgba(167, 134, 85, 0.34) 54%, rgba(167, 134, 85, 0) 54.6%),
+    var(--ashoka-url);
+  animation: ashoka-emerge 1.4s ease-out both;
+}
+
+@keyframes ashoka-emerge {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: var(--texture-opacity);
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 767px) {
+  .ashoka-background-texture {
+    background-size: min(92vw, 480px) min(92vw, 480px);
+    background-position: center center;
+  }
+}
+
+@media print {
+  .ashoka-background-texture { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ashoka-background-texture { animation: none; }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+  p { text-wrap: pretty; }
+  h1, h2 { text-wrap: balance; }
+  :focus-visible { outline-color: var(--color-ring); }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.022em;
+    line-height: 1.15;
+    color: var(--color-foreground);
+  }
+  h4 {
+    letter-spacing: -0.01em;
+    color: var(--color-foreground);
+  }
+}
+
+@utility paper {
+  background-color: var(--color-secondary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@utility rule-bronze {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility card-surface {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+@utility card-interactive {
+  transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+  &:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--color-accent) 40%, var(--color-border));
+  }
+}
+
+@utility hero-navy {
+  background:
+    radial-gradient(60rem 30rem at 85% -10%, color-mix(in oklab, var(--color-accent-light) 10%, transparent), transparent 60%),
+    linear-gradient(180deg, var(--color-navy), var(--color-navy-2));
+  color: var(--color-navy-foreground);
+  & .eyebrow, & .text-accent { color: var(--color-accent-light); }
+  & h1, & h2, & h3 { color: var(--color-navy-foreground); }
+  & .text-muted-foreground { color: color-mix(in oklab, var(--color-navy-foreground) 72%, transparent); }
+  & .card-surface { color: var(--color-foreground); }
+  & .card-surface .text-muted-foreground { color: var(--color-muted-foreground); }
+  & .card-surface .text-accent { color: var(--color-accent); }
+}
+
+@utility grid-lines {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--color-navy-foreground) 3%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--color-navy-foreground) 3%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+@utility eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@utility animate-rise {
+  animation: rise 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
